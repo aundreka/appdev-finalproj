@@ -1,6 +1,4 @@
-# itonatalaga
-
-itonatalaga is a Flutter laboratory showcase that opens with a cinematic animated home screen, then branches into four desktop-style activities: a custom music player, the Grimm Runner mini-game, and two full-page chapter illustrations. The experience leans heavily on rich artwork, ambient audio, and tactile micro-interactions.
+This is a Flutter laboratory showcase that opens with a cinematic animated home screen, then branches into four desktop-style activities: a custom music player, the Grimm Runner mini-game, and two full-page chapter illustrations. The experience leans heavily on rich artwork, ambient audio, and tactile micro-interactions.
 
 ## 🎮 What’s Inside
 1. **HOME** – A Material 3 landing screen with layered parallax clouds, animated grass, looping background music (`assets/opening.mp3`), and floating “Music Player” / “Grimm Runner” pills that mute the intro audio before navigation.
