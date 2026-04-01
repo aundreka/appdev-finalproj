@@ -416,39 +416,44 @@ class Level1Map extends FlameGame {
     'forcefield.mp3',
     'level_up.mp3',
   ]);
-    await images.load('activity2/maps/level1/floor.png');
-    _floorImage = images.fromCache('activity2/maps/level1/floor.png');
+    const floorPath = 'activity2/maps/level1/floor.png';
+    const playerPath = 'activity2/players/level1.png';
+    final decorPaths = kDecorFilenames.map((name) => 'activity2/maps/level1/assets/$name').toList();
+
+    final loadFutures = <Future<void>>[
+      images.load(floorPath),
+      images.load(playerPath),
+      images.load(FIST_SPRITE_PATH),
+      images.load(GUN_BULLET_SPRITE_PATH),
+      images.load(WAND_PROJECTILE_SPRITE_PATH),
+      _safeLoadSprite(EnemyKind.frog, FROG_SPRITE_PATH),
+      _safeLoadSprite(EnemyKind.bat, BAT_SPRITE_PATH),
+      _safeLoadSprite(EnemyKind.fox, FOX_SPRITE_PATH),
+      _safeLoadSprite(EnemyKind.boss, BOSS_SPRITE_PATH),
+      _loadWeaponIcon(WeaponType.forcefield, FORCEFIELD_ICON_PATH),
+      _loadWeaponIcon(WeaponType.holySword, HOLY_SWORD_ICON_PATH),
+      _loadWeaponIcon(WeaponType.reaperScythe, REAPER_SCYTHE_ICON_PATH),
+      _loadWeaponIcon(WeaponType.machineGun, MACHINE_GUN_ICON_PATH),
+      _loadWeaponIcon(WeaponType.goldenGoose, GOLDEN_GOOSE_ICON_PATH),
+      _loadWeaponIcon(WeaponType.holyWand, HOLY_WAND_ICON_PATH),
+    ];
+    loadFutures.addAll(decorPaths.map(images.load));
+    await Future.wait(loadFutures);
+
+    _floorImage = images.fromCache(floorPath);
     _floorSprite = Sprite(_floorImage);
     _floorTileW = _floorImage.width;
     _floorTileH = _floorImage.height;
 
-    for (final name in kDecorFilenames) {
-      final path = 'activity2/maps/level1/assets/$name';
-      await images.load(path);
+    for (final path in decorPaths) {
+      final name = path.split('/').last;
       _spriteCache[name] = Sprite(images.fromCache(path));
     }
 
-    await images.load('activity2/players/level1.png');
-    final playerSprite = Sprite(images.fromCache('activity2/players/level1.png'));
-
-    await _safeLoadSprite(EnemyKind.frog, FROG_SPRITE_PATH);
-    await _safeLoadSprite(EnemyKind.bat, BAT_SPRITE_PATH);
-    await _safeLoadSprite(EnemyKind.fox, FOX_SPRITE_PATH);
-    await _safeLoadSprite(EnemyKind.boss, BOSS_SPRITE_PATH);
-
-    await images.load(FIST_SPRITE_PATH);
+    final playerSprite = Sprite(images.fromCache(playerPath));
     fistSprite = Sprite(images.fromCache(FIST_SPRITE_PATH));
-    await images.load(GUN_BULLET_SPRITE_PATH);
     bulletSprite = Sprite(images.fromCache(GUN_BULLET_SPRITE_PATH));
-    await images.load(WAND_PROJECTILE_SPRITE_PATH);
     wandProjectileSprite = Sprite(images.fromCache(WAND_PROJECTILE_SPRITE_PATH));
-
-    await _loadWeaponIcon(WeaponType.forcefield, FORCEFIELD_ICON_PATH);
-    await _loadWeaponIcon(WeaponType.holySword, HOLY_SWORD_ICON_PATH);
-    await _loadWeaponIcon(WeaponType.reaperScythe, REAPER_SCYTHE_ICON_PATH);
-    await _loadWeaponIcon(WeaponType.machineGun, MACHINE_GUN_ICON_PATH);
-    await _loadWeaponIcon(WeaponType.goldenGoose, GOLDEN_GOOSE_ICON_PATH);
-    await _loadWeaponIcon(WeaponType.holyWand, HOLY_WAND_ICON_PATH);
 
     _world = WorldLayer()..priority = 0;
     add(_world);
@@ -495,13 +500,13 @@ class Level1Map extends FlameGame {
     )..priority = 1002;
     await _playerHud!.add(_hpBar!);
 
-    final _lvlBadge = HudLevelBadge(
+    final lvlBadge = HudLevelBadge(
       statsProvider: () => stats,
       barWidth: 110,
       barHeight: 12,
       offsetAboveHead: 0,
     )..priority = 1002;
-    await _playerHud!.add(_lvlBadge);
+    await _playerHud!.add(lvlBadge);
 
     _weaponIcons = HudWeaponIcons(
       statsProvider: () => stats,
@@ -742,14 +747,12 @@ void _spawnProjectile(Vector2 start, Vector2 targetPos) {
       final offset = Vector2(cos(ang), sin(ang)) * rad;
       return playerWorldCenter + offset; 
     }
-
     while (_t >= _nextPreW1 && _t < 30) {
       _nextPreW1 += 2;
       for (int i = 0; i < 1; i++) {
         _spawn(EnemyKind.frog, spawnNear());
       }
     }
-
     while (_t >= _nextW1 && _t < 60 && _w1TicksLeft > 0) {
       _nextW1 += 5;
       _w1TicksLeft--;
@@ -761,7 +764,6 @@ void _spawnProjectile(Vector2 start, Vector2 targetPos) {
 
       }
     }
-
     while (_t >= _nextPreW2 && _t < 120) {
       _nextPreW2 += 1;
       for (int i = 0; i < 3; i++) {
@@ -774,8 +776,6 @@ void _spawnProjectile(Vector2 start, Vector2 targetPos) {
         _spawn(EnemyKind.fox, spawnNear());
       }
     }
-
-
     while (_t >= _nextW2 && _t < 150 && _w2TicksLeft > 0) {
       _nextW2 += 5;
       _w2TicksLeft--;
@@ -787,7 +787,6 @@ void _spawnProjectile(Vector2 start, Vector2 targetPos) {
 
       }
     }
-
     while (_t >= _nextPreW3 && _t < 180) {
       _nextPreW3 += 1;
       for (int i = 0; i < 1; i++) {
@@ -796,36 +795,28 @@ void _spawnProjectile(Vector2 start, Vector2 targetPos) {
         _spawn(EnemyKind.frog, spawnNear());
       }
     }
-
     if (!_bossSpawned && _t >= 180) {
       _bossSpawned = true;
       _spawn(EnemyKind.boss, spawnNear());
     }
   }
-
   void _spawn(EnemyKind kind, Vector2 pos) {
     final e = Enemy(kind, pos)..priority = 10;
     _enemies.add(e);
     _world.add(e);
-
     if (kind == EnemyKind.boss) {
       debugPrint('👑 Boss spawned – playing level1_boss.mp3');
       FlameAudio.play('level1_boss.mp3');
     }
   }
-
-
-
   void onEnemyKilled(EnemyKind kind, int exp) {
     addScore(exp);
     _grantPlayerExp(exp);
   }
-
   void _grantPlayerExp(int amount) {
     final before = stats.level;
     stats.gainExp(amount);
     final after = stats.level;
-
     if (after > before) {
       final levelsGained = after - before;
       for (int i = 0; i < levelsGained; i++) {
@@ -833,13 +824,10 @@ void _spawnProjectile(Vector2 start, Vector2 targetPos) {
       }
     }
   }
-
-
   void damagePlayer(double amount) {
     if (stats.isDead) return;
     stats.takeDamage(amount);
   }
-
     void _goToLose() {
     pauseEngine();
     
@@ -1225,7 +1213,7 @@ class Enemy extends PositionComponent with HasGameRef<Level1Map> {
       }
     }
 
-    final maxRadius = kChunkRadiusPx + 3000;
+    const maxRadius = kChunkRadiusPx + 3000;
     if ((position - target).length2 > maxRadius * maxRadius) {
       removeFromParent();
     }
@@ -1338,7 +1326,9 @@ class HudPlayer extends SpriteComponent {
 
 class HudHpBar extends PositionComponent {
   final PlayerStats Function() statsProvider;
+  @override
   final double width;
+  @override
   final double height;
   final double offsetAboveHead;
 
@@ -1497,7 +1487,9 @@ class HudLevelBadge extends PositionComponent {
 
 class EnemyHpBar extends PositionComponent {
   final Enemy enemy;
+  @override
   final double width;
+  @override
   final double height;
   final double gap; 
 
@@ -1553,7 +1545,9 @@ class EnemyHpBar extends PositionComponent {
 }
 
 class HudWaveMeter extends PositionComponent {
+  @override
   final double width;
+  @override
   final double height;
   final List<double> flags; 
   final double total;
@@ -1657,12 +1651,12 @@ class HudWeaponIcons extends PositionComponent
 
   
   final Map<WeaponType, Color> bgColors = {
-    WeaponType.forcefield: Color(0xFF3B82F6), 
-    WeaponType.holySword: Color(0xFFFACC15),  
-    WeaponType.reaperScythe: Color(0xFFEF4444), 
-    WeaponType.machineGun: Color(0xFF6B7280), 
-    WeaponType.goldenGoose: Color(0xFF22C55E), 
-    WeaponType.holyWand: Color(0xFFA855F7), 
+    WeaponType.forcefield: const Color(0xFF3B82F6), 
+    WeaponType.holySword: const Color(0xFFFACC15),  
+    WeaponType.reaperScythe: const Color(0xFFEF4444), 
+    WeaponType.machineGun: const Color(0xFF6B7280), 
+    WeaponType.goldenGoose: const Color(0xFF22C55E), 
+    WeaponType.holyWand: const Color(0xFFA855F7), 
   };
 
   @override
@@ -1767,8 +1761,6 @@ class HudWeaponIcons extends PositionComponent
     }
   }
 }
-
-
 
 
 

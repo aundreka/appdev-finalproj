@@ -355,8 +355,8 @@ class Level2Map extends FlameGame {
   int _w3TicksLeft = 6;
 
   double _nextPreW4 = 181;
-  double _nextW4 = 210;
-  int _w4TicksLeft = 6;
+  final double _nextW4 = 210;
+  final int _w4TicksLeft = 6;
 
   bool _bossSpawned = false;
 
@@ -399,47 +399,45 @@ class Level2Map extends FlameGame {
     await FlameAudio.audioCache.load('level2_theme.mp3');
 
     
-    await images.load('activity2/maps/level2/floor.png');
-    _floorImage = images.fromCache('activity2/maps/level2/floor.png');
+    const floorPath = 'activity2/maps/level2/floor.png';
+    const playerPath = 'activity2/players/level2.png';
+    final decorPaths = kDecorFilenames.map((name) => 'activity2/maps/level2/assets/$name').toList();
+
+    final loadFutures = <Future<void>>[
+      images.load(floorPath),
+      images.load(playerPath),
+      images.load(FIST_SPRITE_PATH),
+      images.load(GUN_BULLET_SPRITE_PATH),
+      images.load(WAND_PROJECTILE_SPRITE_PATH),
+      _safeLoadSprite(EnemyKind.lollipop, LOLLIPOP_SPRITE_PATH),
+      _safeLoadSprite(EnemyKind.cupcake, CUPCAKE_SPRITE_PATH),
+      _safeLoadSprite(EnemyKind.cake, CAKE_SPRITE_PATH),
+      _safeLoadSprite(EnemyKind.icecream, ICECREAM_SPRITE_PATH),
+      _safeLoadSprite(EnemyKind.boss, BOSS_SPRITE_PATH),
+      _loadWeaponIcon(WeaponType.forcefield, FORCEFIELD_ICON_PATH),
+      _loadWeaponIcon(WeaponType.holySword, HOLY_SWORD_ICON_PATH),
+      _loadWeaponIcon(WeaponType.reaperScythe, REAPER_SCYTHE_ICON_PATH),
+      _loadWeaponIcon(WeaponType.machineGun, MACHINE_GUN_ICON_PATH),
+      _loadWeaponIcon(WeaponType.goldenGoose, GOLDEN_GOOSE_ICON_PATH),
+      _loadWeaponIcon(WeaponType.holyWand, HOLY_WAND_ICON_PATH),
+    ];
+    loadFutures.addAll(decorPaths.map(images.load));
+    await Future.wait(loadFutures);
+
+    _floorImage = images.fromCache(floorPath);
     _floorSprite = Sprite(_floorImage);
     _floorTileW = _floorImage.width;
     _floorTileH = _floorImage.height;
 
-    
-    for (final name in kDecorFilenames) {
-      final path = 'activity2/maps/level2/assets/$name';
-      await images.load(path);
+    for (final path in decorPaths) {
+      final name = path.split('/').last;
       _spriteCache[name] = Sprite(images.fromCache(path));
     }
 
-    
-    await images.load('activity2/players/level2.png');
-    final playerSprite =
-        Sprite(images.fromCache('activity2/players/level2.png'));
-
-    
-    await _safeLoadSprite(EnemyKind.lollipop, LOLLIPOP_SPRITE_PATH);
-    await _safeLoadSprite(EnemyKind.cupcake, CUPCAKE_SPRITE_PATH);
-    await _safeLoadSprite(EnemyKind.cake, CAKE_SPRITE_PATH);
-    await _safeLoadSprite(EnemyKind.icecream, ICECREAM_SPRITE_PATH);
-    await _safeLoadSprite(EnemyKind.boss, BOSS_SPRITE_PATH);
-
-    
-    await images.load(FIST_SPRITE_PATH);
+    final playerSprite = Sprite(images.fromCache(playerPath));
     fistSprite = Sprite(images.fromCache(FIST_SPRITE_PATH));
-    await images.load(GUN_BULLET_SPRITE_PATH);
     bulletSprite = Sprite(images.fromCache(GUN_BULLET_SPRITE_PATH));
-    await images.load(WAND_PROJECTILE_SPRITE_PATH);
-    wandProjectileSprite =
-        Sprite(images.fromCache(WAND_PROJECTILE_SPRITE_PATH));
-
-    
-    await _loadWeaponIcon(WeaponType.forcefield, FORCEFIELD_ICON_PATH);
-    await _loadWeaponIcon(WeaponType.holySword, HOLY_SWORD_ICON_PATH);
-    await _loadWeaponIcon(WeaponType.reaperScythe, REAPER_SCYTHE_ICON_PATH);
-    await _loadWeaponIcon(WeaponType.machineGun, MACHINE_GUN_ICON_PATH);
-    await _loadWeaponIcon(WeaponType.goldenGoose, GOLDEN_GOOSE_ICON_PATH);
-    await _loadWeaponIcon(WeaponType.holyWand, HOLY_WAND_ICON_PATH);
+    wandProjectileSprite = Sprite(images.fromCache(WAND_PROJECTILE_SPRITE_PATH));
 
     _world = WorldLayer()..priority = 0;
     add(_world);
@@ -486,13 +484,13 @@ class Level2Map extends FlameGame {
     )..priority = 1002;
     await _playerHud!.add(_hpBar!);
 
-    final _lvlBadge = HudLevelBadge(
+    final lvlBadge = HudLevelBadge(
       statsProvider: () => stats,
       barWidth: 110,
       barHeight: 12,
       offsetAboveHead: 0,
     )..priority = 1002;
-    await _playerHud!.add(_lvlBadge);
+    await _playerHud!.add(lvlBadge);
 
     _weaponIcons = HudWeaponIcons(
       statsProvider: () => stats,
@@ -1214,7 +1212,7 @@ class Enemy extends PositionComponent with HasGameRef<Level2Map> {
       }
     }
 
-    final maxRadius = kChunkRadiusPx + 3000;
+    const maxRadius = kChunkRadiusPx + 3000;
     if ((position - target).length2 > maxRadius * maxRadius) {
       removeFromParent();
     }
@@ -1331,7 +1329,9 @@ class HudPlayer extends SpriteComponent {
 
 class HudHpBar extends PositionComponent {
   final PlayerStats Function() statsProvider;
+  @override
   final double width;
+  @override
   final double height;
   final double offsetAboveHead;
 
@@ -1483,7 +1483,9 @@ class HudLevelBadge extends PositionComponent {
 
 class EnemyHpBar extends PositionComponent {
   final Enemy enemy;
+  @override
   final double width;
+  @override
   final double height;
   final double gap;
 
@@ -1540,7 +1542,9 @@ class EnemyHpBar extends PositionComponent {
 
 
 class HudWaveMeter extends PositionComponent {
+  @override
   final double width;
+  @override
   final double height;
   final List<double> flags;
   final double total;
@@ -1643,12 +1647,12 @@ class HudWeaponIcons extends PositionComponent with HasGameRef<Level2Map> {
   }) : super(anchor: Anchor.center);
 
   final Map<WeaponType, Color> bgColors = {
-    WeaponType.forcefield: Color(0xFF3B82F6),
-    WeaponType.holySword: Color(0xFFFACC15),
-    WeaponType.reaperScythe: Color(0xFFEF4444),
-    WeaponType.machineGun: Color(0xFF6B7280),
-    WeaponType.goldenGoose: Color(0xFF22C55E),
-    WeaponType.holyWand: Color(0xFFA855F7),
+    WeaponType.forcefield: const Color(0xFF3B82F6),
+    WeaponType.holySword: const Color(0xFFFACC15),
+    WeaponType.reaperScythe: const Color(0xFFEF4444),
+    WeaponType.machineGun: const Color(0xFF6B7280),
+    WeaponType.goldenGoose: const Color(0xFF22C55E),
+    WeaponType.holyWand: const Color(0xFFA855F7),
   };
 
   @override

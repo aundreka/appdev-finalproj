@@ -189,7 +189,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   runSpacing: 20,
                   children: [
                     _EnhancedPillButton(
-                      label: 'Activity 1',
+                      label: 'Music Player',
                       route: '/a1',
                       delay: 0,
                       base: const Color(0xFF5C0B0B),
@@ -197,27 +197,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       beforeNav: () { try { _bgm.stop(); } catch (_) {} },
                     ),
                     _EnhancedPillButton(
-                      label: 'Activity 2',
+                      label: 'Grimm Runner',
                       route: '/a2',
                       delay: 0.25,
                       base: const Color(0xFF4A0C14),
                       glow: const Color(0xFFFF7A5A),
-                      beforeNav: () { try { _bgm.stop(); } catch (_) {} },
-                    ),
-                    _EnhancedPillButton(
-                      label: 'Activity 3',
-                      route: '/a3',
-                      delay: 0.5,
-                      base: const Color(0xFF3B0E1C),
-                      glow: const Color(0xFFFF9A6A),
-                      beforeNav: () { try { _bgm.stop(); } catch (_) {} },
-                    ),
-                    _EnhancedPillButton(
-                      label: 'Activity 4',
-                      route: '/a4',
-                      delay: 0.75,
-                      base: const Color(0xFF2D1024),
-                      glow: const Color(0xFFFFBA7A),
                       beforeNav: () { try { _bgm.stop(); } catch (_) {} },
                     ),
                   ],

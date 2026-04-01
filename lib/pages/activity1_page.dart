@@ -680,7 +680,6 @@ class _HoverListItem extends StatefulWidget {
   final Widget Function(bool hovering) builder;
 
   const _HoverListItem({
-    super.key,
     required this.selected,
     required this.onTap,
     required this.builder,
