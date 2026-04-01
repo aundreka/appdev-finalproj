@@ -1,4 +1,4 @@
-
+// go to https://github.com/aundreka/AppDev to view the entire project code
 import 'package:flutter/material.dart';
 import '../activity2/home_screen.dart';
 

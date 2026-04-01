@@ -5,9 +5,6 @@ import 'level1_screen.dart';
 import 'level2_screen.dart';
 import 'level3_screen.dart';
 
-
-
-
 const String kHighScoreKey = 'grimm_runner_high_score';
 
 class HomeScreen extends StatefulWidget {
