@@ -86,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             child: const Opacity(
               opacity: 0.08,
               child: _SafeImageAsset(
-                assetPath: 'images/activity2/monsters/level1/boss.png',
+                assetPath: 'assets/images/activity2/monsters/level1/boss.png',
                 width: 220,
                 fit: BoxFit.contain,
               ),
@@ -98,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             child: const Opacity(
               opacity: 0.07,
               child: _SafeImageAsset(
-                assetPath: 'images/activity2/monsters/level2/boss.png',
+                assetPath: 'assets/images/activity2/monsters/level2/boss.png',
                 width: 240,
                 fit: BoxFit.contain,
               ),
@@ -110,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             child: const Opacity(
               opacity: 0.06,
               child: _SafeImageAsset(
-                assetPath: 'images/activity2/monsters/level3/boss.png',
+                assetPath: 'assets/images/activity2/monsters/level3/boss.png',
                 width: 260,
                 fit: BoxFit.contain,
               ),
@@ -177,7 +177,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       _LevelCard(
                         title: 'Level 1 — Little Red Riding Hood',
                         subtitle: 'Forest • Wolves • 3 Waves',
-                        thumbAsset: 'images/activity2/monsters/level1/boss.png',
+                        thumbAsset: 'assets/images/activity2/monsters/level1/boss.png',
                         onTap: () {
                           Navigator.push(
                             context,
@@ -190,7 +190,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       _LevelCard(
                         title: 'Level 2 — Hansel & Gretel',
                         subtitle: 'Candy House • Slimes • 4 Waves',
-                        thumbAsset: 'images/activity2/monsters/level2/boss.png',
+                        thumbAsset: 'assets/images/activity2/monsters/level2/boss.png',
                         onTap: () {
                           Navigator.push(
                             context,
@@ -203,7 +203,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       _LevelCard(
                         title: 'Level 3 — Jack & the Beanstalk',
                         subtitle: 'Field • Minotaurs • 5 Waves',
-                        thumbAsset: 'images/activity2/monsters/level3/boss.png',
+                        thumbAsset: 'assets/images/activity2/monsters/level3/boss.png',
                         onTap: () {
                           Navigator.push(
                             context,
